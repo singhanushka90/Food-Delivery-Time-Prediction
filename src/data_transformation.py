@@ -55,9 +55,7 @@ def remove(df: pd.DataFrame):
 
     try:
         df = df.drop(columns=["Order_ID"])
-
         logger.debug("Order_ID removed successfully")
-
         return df
 
     except Exception as e:
@@ -68,21 +66,11 @@ def remove(df: pd.DataFrame):
 def split_data(df: pd.DataFrame):
 
     try:
-
         X = df.drop(columns=["Delivery_Time_min"])
         y = df["Delivery_Time_min"]
-
-        X_train, X_test, y_train, y_test = train_test_split(
-            X,
-            y,
-            test_size=0.2,
-            random_state=42
-        )
-
+        X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
         logger.debug("Train-test split completed successfully")
-
         return X_train, X_test, y_train, y_test
-
     except Exception as e:
         logger.error("Error during train-test split: %s", e)
         raise
@@ -104,19 +92,11 @@ def create_preprocessor():
         "Vehicle_Type"
     ]
 
-    numerical_pipeline = Pipeline([
-        ("imputer", SimpleImputer(strategy="median"))
-    ])
+    numerical_pipeline = Pipeline([("imputer", SimpleImputer(strategy="median"))])
 
-    categorical_pipeline = Pipeline([
-        ("imputer", SimpleImputer(strategy="most_frequent")),
-        ("encoder", OneHotEncoder(handle_unknown="ignore"))
-    ])
+    categorical_pipeline = Pipeline([("imputer", SimpleImputer(strategy="most_frequent")),("encoder", OneHotEncoder(handle_unknown="ignore"))])
 
-    preprocessor = ColumnTransformer([
-        ("num", numerical_pipeline, numerical_cols),
-        ("cat", categorical_pipeline, categorical_cols)
-    ])
+    preprocessor = ColumnTransformer([("num", numerical_pipeline, numerical_cols),("cat", categorical_pipeline, categorical_cols)])
 
     logger.debug("Preprocessor created successfully")
 
@@ -127,11 +107,8 @@ def transform_data(X_train, X_test, preprocessor):
 
     try:
         X_train_pro = preprocessor.fit_transform(X_train)
-
         X_test_pro = preprocessor.transform(X_test)
-
         logger.debug("Data transformation completed successfully")
-
         return X_train_pro, X_test_pro
 
     except Exception as e:
@@ -143,13 +120,9 @@ def transform_data(X_train, X_test, preprocessor):
 def save_data(data, file_path):
 
     try:
-
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
         dump(data, file_path)
-
         logger.debug("Data saved successfully at %s", file_path)
-
     except Exception as e:
         logger.error("Error while saving data: %s", e)
         raise
@@ -171,47 +144,25 @@ def main():
 
         preprocessor = create_preprocessor()
 
-        X_train_pro, X_test_pro = transform_data(
-            X_train,
-            X_test,
-            preprocessor
-        )
+        X_train_pro, X_test_pro = transform_data(X_train,X_test,preprocessor)
 
         os.makedirs("artifacts/transformed", exist_ok=True)
 
-        save_data(
-            X_train_pro,
-            "artifacts/transformed/X_train.pkl"
-        )
+        save_data(X_train_pro,"artifacts/transformed/X_train.pkl")
 
-        save_data(
-            X_test_pro,
-            "artifacts/transformed/X_test.pkl"
-        )
+        save_data(X_test_pro,"artifacts/transformed/X_test.pkl")
 
-        save_data(
-            y_train,
-            "artifacts/transformed/y_train.pkl"
-        )
+        save_data(y_train,"artifacts/transformed/y_train.pkl")
 
-        save_data(
-            y_test,
-            "artifacts/transformed/y_test.pkl"
-        )
+        save_data(y_test,"artifacts/transformed/y_test.pkl")
 
-        save_data(
-            preprocessor,
-            "artifacts/transformed/preprocessor.pkl"
-        )
+        save_data(preprocessor,"artifacts/transformed/preprocessor.pkl")
 
         logger.info("Data transformation pipeline completed successfully")
 
     except Exception as e:
 
-        logger.error(
-            "Error in data transformation pipeline: %s",
-            e
-        )
+        logger.error("Error in data transformation pipeline: %s",e)
 
         raise
 
