@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Food Delivery Time Predictor</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header -->
+        <header>
+            <div>
+                <h1>Food Delivery Time Predictor</h1>
+                <p>AI-powered delivery time estimation</p>
+            </div>
+
+            <div class="status">
+                <span></span>
+                Model Online
+            </div>
+        </header>
+
+
+        <!-- Main Dashboard -->
+        <main>
+
+            <!-- Input Section -->
+            <section class="card input-card">
+
+                <h2>Delivery Information</h2>
+                <p class="subtitle">
+                    Enter order details to estimate delivery time
+                </p>
+
+                <form id="predictionForm">
+
+                    <div class="form-grid">
+
+                        <div class="input-group">
+                            <label>Distance (km)</label>
+                            <input
+                                type="number"
+                                id="distance"
+                                step="0.1"
+                                min="0"
+                                placeholder="e.g. 5"
+                                required
+                            >
+                        </div>
+
+                        <div class="input-group">
+                            <label>Weather</label>
+                            <select id="weather" required>
+                                <option value="">Select weather</option>
+                                <option value="Clear">Clear</option>
+                                <option value="Rainy">Rainy</option>
+                                <option value="Foggy">Foggy</option>
+                                <option value="Snowy">Snowy</option>
+                                <option value="Windy">Windy</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Traffic Level</label>
+                            <select id="traffic" required>
+                                <option value="">Select traffic</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Time of Day</label>
+                            <select id="timeOfDay" required>
+                                <option value="">Select time</option>
+                                <option value="Morning">Morning</option>
+                                <option value="Afternoon">Afternoon</option>
+                                <option value="Evening">Evening</option>
+                                <option value="Night">Night</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Vehicle Type</label>
+                            <select id="vehicle" required>
+                                <option value="">Select vehicle</option>
+                                <option value="Bike">Bike</option>
+                                <option value="Scooter">Scooter</option>
+                                <option value="Car">Car</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Preparation Time (min)</label>
+                            <input
+                                type="number"
+                                id="preparation"
+                                min="0"
+                                placeholder="e.g. 15"
+                                required
+                            >
+                        </div>
+
+                        <div class="input-group">
+                            <label>Courier Experience (years)</label>
+                            <input
+                                type="number"
+                                id="experience"
+                                min="0"
+                                step="0.1"
+                                placeholder="e.g. 3"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                    <button type="submit" id="predictButton">
+                        Predict Delivery Time
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <!-- Prediction Section -->
+            <section class="dashboard-grid">
+
+                <!-- Prediction Circle -->
+                <div class="card prediction-card">
+
+                    <h2>Estimated Delivery Time</h2>
+
+                    <div class="circle-wrapper">
+
+                        <div class="prediction-circle">
+
+                            <div class="circle-content">
+                                <span id="predictionValue">--</span>
+                                <small>minutes</small>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <p id="predictionMessage">
+                        Enter delivery details to get prediction
+                    </p>
+
+                </div>
+
+
+                <!-- Model Information -->
+                <div class="card model-card">
+
+                    <h2>Model Performance</h2>
+
+                    <div class="metric-grid">
+
+                        <div class="metric">
+                            <span>R² Score</span>
+                            <strong id="r2Value">--</strong>
+                        </div>
+
+                        <div class="metric">
+                            <span>RMSE</span>
+                            <strong id="rmseValue">--</strong>
+                        </div>
+
+                        <div class="metric">
+                            <span>MAE</span>
+                            <strong id="maeValue">--</strong>
+                        </div>
+
+                        <div class="metric">
+                            <span>Model</span>
+                            <strong id="modelName">--</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Model Comparison -->
+            <section class="card">
+
+                <h2>Model Comparison</h2>
+
+                <p class="subtitle">
+                    RMSE comparison of trained regression models
+                </p>
+
+                <div id="modelChart" class="chart"></div>
+
+            </section>
+
+
+            <!-- Input Summary -->
+            <section class="card">
+
+                <h2>Prediction Summary</h2>
+
+                <div class="summary-grid">
+
+                    <div>
+                        <span>Distance</span>
+                        <strong id="summaryDistance">--</strong>
+                    </div>
+
+                    <div>
+                        <span>Weather</span>
+                        <strong id="summaryWeather">--</strong>
+                    </div>
+
+                    <div>
+                        <span>Traffic</span>
+                        <strong id="summaryTraffic">--</strong>
+                    </div>
+
+                    <div>
+                        <span>Time of Day</span>
+                        <strong id="summaryTime">--</strong>
+                    </div>
+
+                    <div>
+                        <span>Vehicle</span>
+                        <strong id="summaryVehicle">--</strong>
+                    </div>
+
+                    <div>
+                        <span>Preparation</span>
+                        <strong id="summaryPreparation">--</strong>
+                    </div>
+
+                    <div>
+                        <span>Courier Experience</span>
+                        <strong id="summaryExperience">--</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <footer>
+            Food Delivery Time Prediction • Machine Learning Project
+        </footer>
+
+    </div>
+
+
+    <script src="/static/script.js"></script>
+
+</body>
+
+</html>
