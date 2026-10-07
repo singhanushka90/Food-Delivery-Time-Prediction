@@ -51,7 +51,7 @@ def save_data(df:pd.DataFrame,file_path:str):
 
 def main():
     try:
-        data_path='experiments/Food_Delivery_Times.csv'
+        data_path='data/experiments/Food_Delivery_Times.csv'
         df=load_data(data_url=data_path)
         save_path="artifacts/raw/Food_Delivery_Times.csv"
         save_data(df,save_path)

@@ -1,0 +1,55 @@
+stages:
+
+  data_ingestion:
+    cmd: python src/data_ingestion.py
+    deps:
+      - src/data_ingestion.py
+      - data/experiments/Food_Delivery_Times.csv
+    outs:
+      - artifacts/raw/Food_Delivery_Times.csv
+
+  data_validation:
+    cmd: python src/data_validation.py
+    deps:
+      - src/data_validation.py
+      - artifacts/raw/Food_Delivery_Times.csv
+
+  data_transformation:
+    cmd: python src/data_transformation.py
+    deps:
+      - src/data_transformation.py
+      - artifacts/raw/Food_Delivery_Times.csv
+    outs:
+      - artifacts/transformed/X_train.pkl
+      - artifacts/transformed/X_test.pkl
+      - artifacts/transformed/y_train.pkl
+      - artifacts/transformed/y_test.pkl
+      - artifacts/transformed/preprocessor.pkl
+
+  model_trainer:
+    cmd: python src/model_trainer.py
+    deps:
+      - src/model_trainer.py
+      - artifacts/transformed/X_train.pkl
+      - artifacts/transformed/y_train.pkl
+    outs:
+      - artifacts/model/linear_regression.pkl
+      - artifacts/model/decision_tree.pkl
+      - artifacts/model/random_forest.pkl
+      - artifacts/model/gradient_boosting.pkl
+      - artifacts/model/xgboost.pkl
+
+  model_evaluation:
+    cmd: python src/model_evaluation.py
+    deps:
+      - src/model_evaluation.py
+      - artifacts/transformed/X_test.pkl
+      - artifacts/transformed/y_test.pkl
+      - artifacts/model/linear_regression.pkl
+      - artifacts/model/decision_tree.pkl
+      - artifacts/model/random_forest.pkl
+      - artifacts/model/gradient_boosting.pkl
+      - artifacts/model/xgboost.pkl
+    outs:
+      - artifacts/model/final_model.pkl
+      - artifacts/evaluation/metrics.json

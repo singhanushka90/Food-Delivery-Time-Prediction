@@ -1,0 +1,141 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/data_ingestion.py
+    deps:
+    - path: data/experiments/Food_Delivery_Times.csv
+      hash: md5
+      md5: 20f163e082754da11f7eab4acdd7ddde
+      size: 44200
+    - path: src/data_ingestion.py
+      hash: md5
+      md5: 0ddb06e9aaa9d14f49792c1ceb1915e1
+      size: 1820
+    outs:
+    - path: artifacts/raw/Food_Delivery_Times.csv
+      hash: md5
+      md5: e6d550b71e3bc23ad4762e98ce69aa9e
+      size: 45201
+  data_validation:
+    cmd: python src/data_validation.py
+    deps:
+    - path: artifacts/raw/Food_Delivery_Times.csv
+      hash: md5
+      md5: e6d550b71e3bc23ad4762e98ce69aa9e
+      size: 45201
+    - path: src/data_validation.py
+      hash: md5
+      md5: a9b0768237c317bd4559692269c4150b
+      size: 2882
+  data_transformation:
+    cmd: python src/data_transformation.py
+    deps:
+    - path: artifacts/raw/Food_Delivery_Times.csv
+      hash: md5
+      md5: e6d550b71e3bc23ad4762e98ce69aa9e
+      size: 45201
+    - path: src/data_transformation.py
+      hash: md5
+      md5: 0a0f7d6490461ce4114b05265725aba0
+      size: 4422
+    outs:
+    - path: artifacts/transformed/X_test.pkl
+      hash: md5
+      md5: 41c4adbc24ddd2e3faa81049602e6b39
+      size: 29025
+    - path: artifacts/transformed/X_train.pkl
+      hash: md5
+      md5: f4d41dd58329cdccba6e096c18f7bba5
+      size: 115441
+    - path: artifacts/transformed/preprocessor.pkl
+      hash: md5
+      md5: cb3432353ea6e2ab1aaf552f674dafaa
+      size: 3866
+    - path: artifacts/transformed/y_test.pkl
+      hash: md5
+      md5: 620c0abc18beecc9abde7e150b4a9abb
+      size: 7211
+    - path: artifacts/transformed/y_train.pkl
+      hash: md5
+      md5: 753e7b26189870bbbf645a079860d9a2
+      size: 26412
+  model_trainer:
+    cmd: python src/model_trainer.py
+    deps:
+    - path: artifacts/transformed/X_train.pkl
+      hash: md5
+      md5: f4d41dd58329cdccba6e096c18f7bba5
+      size: 115441
+    - path: artifacts/transformed/y_train.pkl
+      hash: md5
+      md5: 753e7b26189870bbbf645a079860d9a2
+      size: 26412
+    - path: src/model_trainer.py
+      hash: md5
+      md5: 159e3a97aa146e7252cf2786325697fd
+      size: 3563
+    outs:
+    - path: artifacts/model/decision_tree.pkl
+      hash: md5
+      md5: 8e67eb7632d441b798f7cd539e256069
+      size: 103313
+    - path: artifacts/model/gradient_boosting.pkl
+      hash: md5
+      md5: 2f766b7cf03cb57149c5749e276c69fb
+      size: 152492
+    - path: artifacts/model/linear_regression.pkl
+      hash: md5
+      md5: c99defbdb85899de92826655c4f5ae05
+      size: 856
+    - path: artifacts/model/random_forest.pkl
+      hash: md5
+      md5: a4fe50fdaa8b054885f4c04a388d10b7
+      size: 2388481
+    - path: artifacts/model/xgboost.pkl
+      hash: md5
+      md5: f0dc5459bff0a7c273b7d4be776adb6b
+      size: 120794
+  model_evaluation:
+    cmd: python src/model_evaluation.py
+    deps:
+    - path: artifacts/model/decision_tree.pkl
+      hash: md5
+      md5: 8e67eb7632d441b798f7cd539e256069
+      size: 103313
+    - path: artifacts/model/gradient_boosting.pkl
+      hash: md5
+      md5: 2f766b7cf03cb57149c5749e276c69fb
+      size: 152492
+    - path: artifacts/model/linear_regression.pkl
+      hash: md5
+      md5: c99defbdb85899de92826655c4f5ae05
+      size: 856
+    - path: artifacts/model/random_forest.pkl
+      hash: md5
+      md5: a4fe50fdaa8b054885f4c04a388d10b7
+      size: 2388481
+    - path: artifacts/model/xgboost.pkl
+      hash: md5
+      md5: f0dc5459bff0a7c273b7d4be776adb6b
+      size: 120794
+    - path: artifacts/transformed/X_test.pkl
+      hash: md5
+      md5: 41c4adbc24ddd2e3faa81049602e6b39
+      size: 29025
+    - path: artifacts/transformed/y_test.pkl
+      hash: md5
+      md5: 620c0abc18beecc9abde7e150b4a9abb
+      size: 7211
+    - path: src/model_evaluation.py
+      hash: md5
+      md5: f71322931e47fdd55f628df1f73f8708
+      size: 4178
+    outs:
+    - path: artifacts/evaluation/metrics.json
+      hash: md5
+      md5: c7aae200ceee5670865a12325a80a35a
+      size: 880
+    - path: artifacts/model/final_model.pkl
+      hash: md5
+      md5: 935891fea8ad766fac0d7b21a495e8f3
+      size: 890
